@@ -1,7 +1,7 @@
+from fastapi.testclient import TestClient
+
 from app.main import app
 from app.models.transaction_model import Transaction
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 client = TestClient(app)
 
