@@ -1,9 +1,12 @@
 from app.models.transaction_model import Transaction
 from fastapi import APIRouter
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/transactions",
+    tags=["transactions"],
+)
 
 
-@router.post("/transactions/new")
+@router.post("/new")
 def post(transaction: Transaction) -> None:
     return "Add transaction"
