@@ -9,4 +9,5 @@ router = APIRouter(
 
 @router.post("/new")
 def post(transaction: Transaction) -> None:
+    print(transaction)
     return "Add transaction"
