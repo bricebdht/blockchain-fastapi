@@ -1,5 +1,4 @@
 """Transaction models"""
-from decimal import Decimal
 
 from pydantic import BaseModel
 
@@ -9,4 +8,4 @@ class Transaction(BaseModel):
 
     sender: str
     recipient: str
-    amount: Decimal
+    amount: float  # Need to update to use Decimal type
