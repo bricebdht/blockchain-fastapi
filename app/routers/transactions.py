@@ -15,9 +15,7 @@ client = MongoClient(host="localhost", port=27017)
 
 
 @router.post("/new")
-def post(transaction: Transaction) -> None:
+def post(transaction: Transaction) -> Transaction:
     """Create a new transaction in database"""
-    client.blockchain.transaction.insert_one(transaction.dict())
-    for data in client.blockchain.transaction.find():
-        print(data)
-    return "Add transaction"
+    transaction.insert()
+    return transaction.dict()
