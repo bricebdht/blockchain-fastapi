@@ -14,7 +14,7 @@ def generate_payload() -> Transaction:
 
 def test_create_transaction():
     """Create transaction successfully"""
-    Transaction.collection().drop()
+    Transaction.get_collection().drop()
     response = client.post("/transactions/new", json=generate_payload())
     assert response.status_code == 200
-    assert Transaction.collection().count_documents({}) == 1
+    assert Transaction.get_collection().count_documents({}) == 1
