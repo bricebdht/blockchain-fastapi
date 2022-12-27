@@ -9,10 +9,12 @@ client = TestClient(app)
 
 def generate_payload() -> Transaction:
     """Generate payload used in POST and PUT requests"""
-    return {"sender": "toto", "recipient": "titi", "amount": 5}
+    return {"sender": "toto", "recipient": "tutu", "amount": 5}
 
 
 def test_create_transaction():
     """Create transaction successfully"""
+    Transaction.get_collection().drop()
     response = client.post("/transactions/new", json=generate_payload())
     assert response.status_code == 200
+    assert Transaction.get_collection().count_documents({}) == 1
