@@ -1,8 +1,10 @@
 """Tests of API regarding transactions"""
+from datetime import datetime
+
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.models.transaction_model import Transaction
+from app.models.block_model import Block, Transaction
 
 client = TestClient(app)
 
@@ -14,7 +16,9 @@ def generate_payload() -> Transaction:
 
 def test_create_transaction():
     """Create transaction successfully"""
-    Transaction.get_collection().drop()
     response = client.post("/transactions/new", json=generate_payload())
     assert response.status_code == 200
-    assert Transaction.get_collection().count_documents({}) == 1
+
+    blocks = list(Block.get_collection().find())
+    assert len(blocks[0]["transactions"]) == 1
+    assert response.json() == "Transaction has been added to block 0"
