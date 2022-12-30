@@ -2,7 +2,6 @@
 APIs related to transactions
 """
 from fastapi import APIRouter
-from pymongo import MongoClient
 
 from app.models.block_model import Block, Transaction
 
@@ -11,15 +10,12 @@ router = APIRouter(
     tags=["transactions"],
 )
 
-client = MongoClient(host="localhost", port=27017)
-
 
 @router.post("/new")
 def post(transaction: Transaction) -> Transaction:
     """Create a new transaction in database"""
-    cursor = list(Block.get_collection().find().sort("index", -1).limit(1))
-    current_block = cursor[0]
-    current_block["transactions"].append(transaction.dict())
-    Block(**current_block).update({"transactions": current_block["transactions"]})
+    last_block = Block.get_last_block()
+    last_block["transactions"].append(transaction.dict())
+    Block(**last_block).update({"transactions": last_block["transactions"]})
 
-    return f"Transaction has been added to block {current_block['index']}"
+    return f"Transaction has been added to block {last_block['index']}"

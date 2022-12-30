@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from pydantic import BaseSettings
 
 
@@ -6,3 +8,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+NODE_IDENTIFIER = str(uuid4())

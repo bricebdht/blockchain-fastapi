@@ -23,12 +23,18 @@ class Block(BaseModel):
     index: int
     timestamp: datetime
     transactions: List[Transaction]
-    proof: int = None
+    proof: int
     previous_hash: str = None
 
     @classmethod
     def get_collection(cls):
         return client[settings.database_name][COLLECTION_NAME]
+
+    @classmethod
+    def get_last_block(cls) -> Dict[str, Any]:
+        cursor = list(Block.get_collection().find().sort("index", -1).limit(1))
+        current_block = cursor[0]
+        return current_block
 
     def insert(self) -> None:
         client[settings.database_name][COLLECTION_NAME].insert_one(self.dict())
