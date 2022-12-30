@@ -16,16 +16,9 @@ def generate_payload() -> Transaction:
 
 def test_create_transaction():
     """Create transaction successfully"""
-    Block.get_collection().drop()
-    new_block = Block(
-        index=0,
-        timestamp=datetime.now(),
-        transactions=[],
-    )
-    new_block.insert()
-    cursor = Block.get_collection().find()
     response = client.post("/transactions/new", json=generate_payload())
     assert response.status_code == 200
-    cursor = Block.get_collection().find()
-    block = cursor.next()
-    assert len(block["transactions"]) == 1
+
+    blocks = list(Block.get_collection().find())
+    assert len(blocks[0]["transactions"]) == 1
+    assert response.json() == "Transaction has been added to block 0"
