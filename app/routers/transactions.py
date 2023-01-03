@@ -12,7 +12,7 @@ router = APIRouter(
 
 
 @router.post("/new")
-def post(transaction: Transaction) -> Transaction:
+def post(transaction: Transaction) -> str:
     """Create a new transaction in database"""
     last_block = Block.get_last_block()
     last_block["transactions"].append(transaction.dict())

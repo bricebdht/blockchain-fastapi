@@ -1,4 +1,6 @@
 from datetime import datetime
+from hashlib import sha256
+from json import dumps, loads
 from typing import Any, Dict, List
 
 from pydantic import BaseModel
@@ -43,3 +45,8 @@ class Block(BaseModel):
         client[settings.database_name][COLLECTION_NAME].update_one(
             {"index": self.index}, {"$set": updated_fields}
         )
+
+    def hash(self) -> str:
+        # We must make sure that the Dictionary is Ordered, or we'll have inconsistent hashes
+        stringified_block = dumps(loads(self.json()), sort_keys=True).encode()
+        return sha256(stringified_block).hexdigest()
