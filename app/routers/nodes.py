@@ -41,7 +41,7 @@ def validate_chain(chain: List[Block]):
     return True
 
 
-@router.post("/resolve")
+@router.get("/resolve")
 def get() -> str:
     """
     Resolve conflicts with the chains of other nodes
@@ -51,9 +51,9 @@ def get() -> str:
     nodes = Node.get_collection().find()
     current_length = Block.get_collection().count_documents({})
     for node in nodes:
-        response = requests.get(f"{node.address}/chain")
-        length = response["length"]
-        chain = response["chain"]
+        response = requests.get(f"{node['address']}/chain")
+        chain = response.json()
+        length = len(chain)
         if length > current_length and validate_chain(chain=chain):
             for i in range(current_length, length):
                 new_block = Block(**chain[i])

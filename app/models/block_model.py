@@ -1,6 +1,6 @@
 from datetime import datetime
 from hashlib import sha256
-from json import dumps
+from json import dumps, loads
 from typing import Any, Dict, List
 
 from pydantic import BaseModel
@@ -48,5 +48,5 @@ class Block(BaseModel):
 
     def hash(self) -> str:
         # We must make sure that the Dictionary is Ordered, or we'll have inconsistent hashes
-        stringified_block = dumps(self, sort_keys=True).encode()
+        stringified_block = dumps(loads(self.json()), sort_keys=True).encode()
         return sha256(stringified_block).hexdigest()
